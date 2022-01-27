@@ -61,10 +61,34 @@ const moviesController = {
         })
     },
     edit: function(req, res) {
-        
+        db.Movie.findByPk(parseInt(req.params.id))
+        .then(Movie=>{
+
+            res.render("moviesEdit", {Movie});
+        })
+        .catch(error=>{
+            console.log(error);
+        })
     },
     update: function (req,res) {
-        // TODO
+        const id = req.params.id;
+        const {title, rating, awards, release_date, length} = req.body;
+        db.Movie.update({
+            title,
+            rating: parseInt(rating),
+            awards: parseInt(awards),
+            length: parseInt(length),
+            release_date
+        },
+        {
+            where:{id: req.params.id} 
+        })
+        .then(()=>{
+            res.redirect("/movies/detail/"+id)
+        })
+        .catch(error=>{
+            console.log(error);
+        })
     },
     delete: function (req, res) {
         // TODO
